@@ -1,0 +1,34 @@
+a//Table_name: id_name //Left
+1	dog
+1	cat
+1	dog
+2	pig
+6	bettry
+4	tiger
+10	lion
+4	snack
+
+b//Table_name: id_name_null //Right
+1	null
+2	null
+3	fish
+4	snack
+10	lion
+
+c//Table name: table_null 
+null null
+2 null
+2 null
+3 test
+
+
+d//Table name: id_name_score 
+1 zcw 90
+1 stu 85
+1 work 60 
+3 viver 10
+3 viven 20
+8 spring 60
+8 spring 66
+7 mvc 99
+

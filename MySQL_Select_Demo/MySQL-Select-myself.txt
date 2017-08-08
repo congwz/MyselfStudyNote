@@ -1,0 +1,99 @@
+/*INNER JOIN*/
+/*1*/SELECT id_name.id, id_name.name FROM id_name INNER JOIN id_name_null ON id_name.id = id_name_null.id;
+/*2*/SELECT id_name.id AS a_id, id_name.name AS a_name,id_name_null.id AS b_id,id_name_null.name AS b_name FROM id_name INNER JOIN id_name_null ON id_name.id = id_name_null.id;
+/*3*/SELECT DISTINCT id_name.id AS a_id, id_name.name AS a_name,id_name_null.id AS b_id,id_name_null.name AS b_name FROM id_name INNER JOIN id_name_null ON id_name.id = id_name_null.id;
+
+
+
+/**LEFT OUTER JOIN  == LEFT JOIN  */
+/*4*/SELECT id_name.id, id_name.name FROM id_name LEFT OUTER JOIN id_name_null ON id_name.id = id_name_null.id;
+
+
+/**RIGHT OUTER JOIN == RIGHT JOIN */
+SELECT id_name.id, id_name.name FROM id_name RIGHT OUTER JOIN id_name_null ON id_name.id = id_name_null.id;
+
+/*5*/SELECT id_name.id AS LOa_id, id_name.name AS LOa_name,id_name_null.id AS LOb_id,id_name_null.name AS LOb_name FROM id_name LEFT OUTER JOIN id_name_null ON id_name.id = id_name_null.id;
+
+/*6*/SELECT DISTINCT id_name.id AS LOa_id, id_name.name AS LOa_name,id_name_null.id AS LOb_id,id_name_null.name AS LOb_name FROM id_name LEFT OUTER JOIN id_name_null ON id_name.id = id_name_null.id;
+SELECT id_name.id AS ROa_id, id_name.name AS ROa_name,id_name_null.id AS ROb_id,id_name_null.name AS ROb_name FROM id_name RIGHT OUTER JOIN id_name_null ON id_name.id = id_name_null.id;
+
+/*7*/SELECT id_name_null.id, id_name_null.name FROM id_name_null LEFT OUTER JOIN id_name  ON id_name_null.id = id_name.id;
+SELECT id_name_null.id, id_name_null.name FROM id_name_null RIGHT OUTER JOIN id_name ON id_name_null.id = id_name.id;
+
+/*8*/SELECT id_name_null.id AS LOb_id, id_name_null.name AS LOb_name,id_name.id AS LOa_id,id_name.name AS LOa_name FROM id_name_null LEFT OUTER JOIN id_name ON id_name.id = id_name_null.id;
+SELECT id_name_null.id AS ROb_id, id_name_null.name AS ROb_name,id_name.id AS ROa_id,id_name.name AS ROa_name FROM id_name_null RIGHT OUTER JOIN id_name ON id_name.id = id_name_null.id;
+
+
+/*LEFT(RIGHT) OUTER JOIN 或者LEFT(RIGHT) JOIN ，when one table（table_null） is null */
+1、SELECT id_name.id , id_name.name FROM id_name LEFT OUTER JOIN table_null ON id_name.id = table_null.id;
+   SELECT id_name.id , id_name.name FROM id_name RIGHT OUTER JOIN table_null ON id_name.id = table_null.id;
+
+2、 SELECT id_name_null.id , id_name_null.name FROM id_name_null LEFT OUTER JOIN table_null ON id_name_null.id = table_null.id;
+    SELECT table_null.id , table_null.name FROM id_name_null RIGHT OUTER JOIN table_null ON id_name_null.id = table_null.id;
+
+3、/*group by Table： id_name */     ------>Group By本身就有Distinct的作用。
+SELECT id,name FROM id_name GROUP BY id,name;
+
+SELECT id,COUNT(name) FROM id_name GROUP BY id,name;
+
+SELECT id,COUNT(name) AS name_cnt FROM id_name GROUP BY id;
+
+
+/*group by Table： id_name_null */
+
+SELECT id,name FROM id_name_null GROUP BY id;
+
+/*group by Table： table_null */
+
+SELECT id,name FROM table_null GROUP BY id,name;
+
+
+4、/* group by & order by ---对比如下：*/
+
+SELECT id,name FROM id_name GROUP BY id,name;
+SELECT id,name FROM id_name GROUP BY id,name ORDER BY id DESC;
+
+
+
+5、
+Having与Where的区别：
+
+where 子句的作用是在对查询结果进行分组前，将不符合where条件的行去掉，即在分组之前过滤数据，where条件中不能包含聚组函数，使用where条件过滤出特定的行。
+
+having 子句的作用是筛选满足条件的组，即在分组之后过滤数据，条件中经常包含聚组函数，使用having 条件过滤出特定的组，也可以使用多个分组标准进行分组。
+
+
+/* Where、 group by、having：id_name */
+SELECT id,name FROM id_name WHERE id > 1;
+SELECT id,name FROM id_name WHERE id > 1 GROUP BY id,name;
+SELECT id,name FROM id_name GROUP BY id,name HAVING SUM(id) > 2;
+SELECT id,name FROM id_name WHERE id >4 GROUP BY id,name HAVING SUM(id) > 2;
+
+
+1.	/* group by、having：id_name  & id_name_score 对比如下：*/
+
+SELECT id,name FROM id_name GROUP BY id,name HAVING SUM(id) > 2;
+ 	
+	SELECT id,name,score FROM id_name_score GROUP BY id,name HAVING SUM(id) > 2;
+ 	SELECT id,name,score FROM id_name_score GROUP BY id,name HAVING SUM(score) > 15;
+
+
+2.	/* Where、 group by、having、 order by：id_name  & id_name_score 对比如下：*/
+
+SELECT id,name FROM id_name WHERE id >3 GROUP BY id,name HAVING SUM(id) > 2 ORDER BY name;
+
+ 	SELECT id,name FROM id_name WHERE id >3 GROUP BY id,name HAVING SUM(id) > 2 ORDER BY name DESC;
+	SELECT id,name,score FROM id_name_score WHERE id >1 GROUP BY id,name HAVING SUM(score) > 10 ORDER BY name DESC;
+	SELECT id,name,score FROM id_name_score WHERE id >1 GROUP BY id,name,score HAVING SUM(score) > 10 ORDER BY name DESC;
+	SELECT id,name,score FROM id_name_score WHERE id <10 GROUP BY id,name,score HAVING SUM(score) > 10 ORDER BY score;
+	SELECT id,name,score FROM id_name_score WHERE id <10 GROUP BY id,name HAVING SUM(score) > 10 ORDER BY score;
+	SELECT id,name,score FROM id_name_score WHERE id <10 GROUP BY id,name HAVING SUM(score) > 10 ORDER BY name;
+    SELECT id,name,score FROM id_name_score WHERE id <10 GROUP BY id,name,score HAVING SUM(score) > 10 ORDER BY name;
+
+
+
+
+
+
+
+
